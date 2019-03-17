@@ -573,7 +573,7 @@ settings = {
 	gameLengths = 1,
 };
 
-keys_short = {3, 8}; -- Only works for Glitched runs
+keys_short = {3, 8};
 keys_med = {3, 6, 7, 8};
 keys_long = {1,2,3,4,5,6,7,8};
 
