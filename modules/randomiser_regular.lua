@@ -579,11 +579,15 @@ tagless_map_table = {
 	{37, {1}},
 	{39, {1}},
 	{41, {1}},
-	{43, {2,3,5}}, --special case
+	{43, {2}, 0x2B00},
+	{43, {5}, 0x2B01},
+	{43, {3}, 0x2B02},
 	{44, {4}},
 	{45, {4}},
-	{46, {1,4}}, --special case
-	{47, {3,4}}, --special case
+	{46, {1}, 0x2E00},
+	{46, {4}, 0x2E01},
+	{47, {4}, 0x2F00},
+	{47, {3}, 0x2F01},
 	{49, {1}},
 	{51, {2}},
 	{52, {4}},
@@ -617,7 +621,8 @@ tagless_map_table = {
 	{108, {3,4}},
 	{110, {1}},
 	{112, {1,2,5}},
-	{113, {4,5}}, --special case
+	{113, {5}, 0x7100},
+	{113, {4}, 0x7101},
 	{114, {1}},
 	{164, {1,5}},
 	{166, {5}},
@@ -1000,11 +1005,15 @@ function generateAssortmentWithLogic()
 
 		--Handle tag-less maps first
 		for i = 1, #tagless_map_table do
-			--step a) identify map and which kongs need access
 			local dest_map = tagless_map_table[i][1];
 			local kong_array = tagless_map_table[i][2];
+			local special_case_lz = tagless_map_table[i][3];
 			
-			handle_tagless_map(dest_map, kong_array);
+			if special_case_lz ~= nil then
+				handle_tagless_map(dest_map, kong_array, special_case_lz);
+			else
+				handle_tagless_map(dest_map, kong_array);
+			end
 			file:write("\n");
 		end
 		
@@ -1144,7 +1153,7 @@ function handle_tagless_map(dest_map,kong_array,special_case_lz)
 					if tagless_map_table[i][1] == map_to_origin then
 						tag_reached = false;
 						local new_kong_array = unionOfSets(kong_array, tagless_map_table[i][2]);
-						no_repeat = handle_tagless_map(tagless_map_table[i][1], new_kong_array, lz_to_origin);
+						no_repeat = handle_tagless_map(map_to_origin, new_kong_array, lz_to_origin);
 						break;
 					end
 				end
